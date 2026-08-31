@@ -23,6 +23,34 @@ app.MapPost("/api/livros", (LivroEntradaDto dados) =>
     return Results.Created($"/api/livros/{novoLivro.Id}", novoLivro);
 });
 
+app.MapPut("/api/livros/{id:int}", (int id LivroEntradaDto dados) =>
+{
+  int indice = livros.FindIndex(livroDaLista => livroDaLista.id == id);
+  if (indice == -1)
+  {
+    return Results.NotFound();
+  }
+
+  var livroAtualizado = new LivroDto(id, dados.titulo, dados.autor, dados.dataDePublicacao);
+  
+  livros[indice] = livroAtualizado;
+
+  return Results.Ok(livroAtualizado);
+});
+
+app.MapDelete("api/livros/{id:int}", (int id) =>
+{
+  int indice = livros.FindIndex(livroDaLista => livroDaLista.id == id);
+  if (index == -1)
+  {
+    return Results.NotFound();
+  }
+
+  livros.RemoveAt(indice)
+  
+  return Results.NoContent();
+});
+
 app.Run();
 
 record LivroDto(int Id, string Titulo, string Autor, int DataDePublicacao);
